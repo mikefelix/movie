@@ -1,7 +1,6 @@
 package com.overstock.android.interview.java.api;
 
 import android.support.annotation.Nullable;
-
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

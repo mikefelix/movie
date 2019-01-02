@@ -1,0 +1,56 @@
+*.iml
+local.properties
+.idea/*
+!.idea/codeStyleSettings.xml
+!.idea/codeStyles
+build
+!build-variant-impl/src/main/java/com/overstock/android/build
+decomp
+captures
+.gradle
+wh.properties
+**/third_party_license*
+android-app/src/main/res/values/com_crashlytics_export_strings.xml
+android-app/src/main/assets/crashlytics-build.properties
+
+# we're generating these
+third_party_license*
+
+# Unity generated
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Bb]uild/
+**/[Bb]uilds/
+**/[Ll]ibrary/*
+sysinfo.txt
+*.stackdump
+**/Assets/AssetStoreTools*
+**/Assets/Test Furniture*
+
+# Visual Studio / MonoDevelop / Rider generated #
+**/[Ee]xported[Oo]bj/
+**/.consulo/
+*.csproj
+**/.vs/
+*.userprefs
+*.pidb
+*.suo
+*.sln*
+*.user
+*.unityproj
+*.booproj
+*.tmp
+*.user
+*.svd
+*.pidb.meta
+
+# OS generated #
+.DS_Store*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
+sysinfo.txt
+*.apk
+*.unitypackage

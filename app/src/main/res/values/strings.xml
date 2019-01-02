@@ -1,0 +1,4 @@
+<resources>
+  <string name="app_name">Interview Task</string>
+  <string name="search_movie_edit_hint">Search movie by name</string>
+</resources>

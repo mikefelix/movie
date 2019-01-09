@@ -1,5 +1,6 @@
 package com.overstock.android.interview.kotlin
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -35,9 +36,11 @@ class KotlinMovieSearchActivity : AppCompatActivity() {
     search()
   }
 
+  @SuppressLint("CheckResult")
   private fun search(query: String? = null) {
-    val source =
-      if (query?.isNotBlank() == true) movieApi.searchMovies(query) else movieApi.searchPopularMovies()
+    adapter.beginLoad()
+
+    val source = if (query?.isNotBlank() == true) movieApi.searchMovies(query) else movieApi.searchPopularMovies()
 
     source
       .subscribeOn(io())

@@ -10,12 +10,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.overstock.android.R
+import timber.log.Timber
 
 class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var movies: List<MovieResult> = emptyList()
   private var loading: Boolean = false
 
-  override fun getItemCount(): Int = movies.size
+  override fun getItemCount(): Int {
+    val result = if (loading) 1 else movies.size
+    Timber.d("Movies size: ${result}")
+    return movies.size //result
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
     return when(viewType){
@@ -46,16 +51,23 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
   }
 
-  fun beginLoad(){
+  fun beginLoad() {
+    Timber.d("Begin load")
     loading = true
+//    clear()
+//    notifyItemRangeInserted(0, 1)
   }
 
-  fun replaceMovies(moviesBeingAdded: List<MovieResult>) {
+  fun clear(){
     val currentMovieCount = movies.size
     if (currentMovieCount > 0) {
       movies = emptyList()
       notifyItemRangeRemoved(0, currentMovieCount)
     }
+  }
+
+  fun replaceMovies(moviesBeingAdded: List<MovieResult>) {
+    clear();
 
     if (moviesBeingAdded.isNotEmpty()) {
       movies = moviesBeingAdded
@@ -94,10 +106,12 @@ class MovieViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
       }
     }
 
-    Glide.with(itemView.context)
-      .load("http://image.tmdb.org/t/p/$WIDTH_OPTION/${movie.relativePosterPath}")
-      .apply(RequestOptions().error(R.drawable.no_poster_image).override(Target.SIZE_ORIGINAL))
-      .into(poster)
+    movie.relativePosterPath?.let {
+      Glide.with(itemView.context)
+        .load("http://image.tmdb.org/t/p/$WIDTH_OPTION/$it")
+        .apply(RequestOptions().error(R.drawable.no_poster_image).override(Target.SIZE_ORIGINAL))
+        .into(poster)
+    }
   }
 }
 

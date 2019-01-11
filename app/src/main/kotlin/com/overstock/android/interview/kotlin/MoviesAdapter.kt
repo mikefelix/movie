@@ -17,8 +17,8 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var loading: Boolean = false
 
   override fun getItemCount(): Int {
-    val result = if (loading) 1 else movies.size
-    Timber.d("Movies size: ${result}")
+//    val result = if (loading) 1 else movies.size
+//    Timber.d("Movies size: ${result}")
     return movies.size //result
   }
 
@@ -54,8 +54,6 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   fun beginLoad() {
     Timber.d("Begin load")
     loading = true
-//    clear()
-//    notifyItemRangeInserted(0, 1)
   }
 
   fun clear(){
@@ -67,10 +65,11 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   }
 
   fun replaceMovies(moviesBeingAdded: List<MovieResult>) {
-    clear();
+    clear()
 
     if (moviesBeingAdded.isNotEmpty()) {
       movies = moviesBeingAdded
+      Timber.i("Adding ${movies.size} movies.")
       notifyItemRangeInserted(0, movies.size)
     }
 
@@ -96,6 +95,7 @@ class MovieViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
       rating.visibility = View.GONE
     }
     else {
+      rating.visibility = View.VISIBLE
       movie.averageRating.let {
         rating.text = it.toString()
         rating.setBackgroundResource(when {

@@ -47,7 +47,7 @@ data class MovieResult(
 
   fun year(): String? = releaseDate?.run { substring(0, Math.min(length, 4)) }
 
-  fun details(): String = arrayOf(firstGenre(), year()).joinToString(", ")
+  fun details(): String = arrayOf(firstGenre(), year()).filterNotNull().joinToString(", ")
 
   fun test(): String  {
     val s: String? = null

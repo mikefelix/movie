@@ -2,9 +2,11 @@ package com.overstock.android.interview.kotlin
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -14,6 +16,7 @@ import android.widget.EditText
 import com.overstock.android.R
 import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
 import io.reactivex.schedulers.Schedulers.io
+import java.lang.RuntimeException
 
 class KotlinMovieSearchActivity : AppCompatActivity() {
   private val adapter: MoviesAdapter = MoviesAdapter()
@@ -24,9 +27,15 @@ class KotlinMovieSearchActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_movie_search)
 
-    val moviesRecycler = findViewById<RecyclerView>(R.id.movies_recycler)
-    moviesRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-    moviesRecycler.adapter = adapter
+    findViewById<RecyclerView>(R.id.movies_recycler).apply {
+      adapter = this.adapter
+    }.also {
+      when (getResources().getConfiguration().orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> it.layoutManager = GridLayoutManager(this, 2)
+        Configuration.ORIENTATION_LANDSCAPE -> it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        else -> throw RuntimeException("Unknown orientation")
+      }
+    }
 
     val searchField = findViewById<EditText>(R.id.search_field)
 

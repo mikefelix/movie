@@ -13,16 +13,41 @@ import com.overstock.android.R
 
 class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
   private var movies: List<MovieResult> = emptyList()
+  private var loading: Boolean = false
 
   override fun getItemCount(): Int = movies.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-    val movieItemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
-    return MovieViewHolder(movieItemView)
+    return when(viewType){
+      MOVIE_ROW -> {
+        val movieItemView = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
+        MovieViewHolder(movieItemView)
+      }
+      PROGRESS_ROW -> {
+        EmptyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.progress, parent, false))
+      }
+      else -> {
+        EmptyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.empty, parent, false))
+      }
+    }
+  }
+
+  override fun getItemViewType(position: Int): Int {
+    return when {
+      loading && position == 0 -> PROGRESS_ROW
+      loading -> EMPTY_ROW
+      else -> MOVIE_ROW
+    }
   }
 
   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-    (holder as? MovieViewHolder)?.bind(movies[position])
+    if (holder is MovieViewHolder){
+      holder.bind(movies[position])
+    }
+  }
+
+  fun beginLoad(){
+    loading = true
   }
 
   fun replaceMovies(moviesBeingAdded: List<MovieResult>) {
@@ -36,7 +61,13 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       movies = moviesBeingAdded
       notifyItemRangeInserted(0, movies.size)
     }
+
+    loading = false
   }
+}
+
+class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
 }
 
 class MovieViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
@@ -71,3 +102,7 @@ class MovieViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
 }
 
 private const val WIDTH_OPTION = "w500" // all available options: w92, w154, w185, w342, w500, w780 or original
+
+private const val MOVIE_ROW = 0;
+private const val PROGRESS_ROW = 1;
+private const val EMPTY_ROW = 2;

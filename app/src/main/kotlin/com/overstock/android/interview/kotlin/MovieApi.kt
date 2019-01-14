@@ -45,6 +45,11 @@ data class MovieResult(
   fun firstGenre(): String? = genres().firstOrNull()
   fun year(): String? = releaseDate?.substring(0, 4)
   fun details(): String = arrayOf(firstGenre(), year()).joinToString(", ")
+
+  fun test(): String  {
+    val s: String? = null
+    return "hello" + s
+  }
 }
 
 @Suppress("unused")

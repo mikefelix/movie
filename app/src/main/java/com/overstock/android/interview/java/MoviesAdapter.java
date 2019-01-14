@@ -69,6 +69,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         .into(poster);
     }
 
-    private static final String WIDTH_OPTION = "w500"; // all available options: w92, w154, w185, w342, w500, w780 or original
+    private static final String WIDTH_OPTION = "w500";
+      // all available options: w92, w154, w185, w342, w500, w780 or original
   }
 }

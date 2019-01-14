@@ -63,7 +63,8 @@ public class JavaMovieSearchActivity extends AppCompatActivity {
   @SuppressLint("CheckResult")
   private void search(@Nullable String query) {
     boolean isEmptyQuery = query == null || query.trim().isEmpty();
-    Single<MovieSearchResponse> source = isEmptyQuery ? movieApi.searchPopularMovies(null) : movieApi.searchMovies(query, null);
+    Single<MovieSearchResponse> source =
+      isEmptyQuery ? movieApi.searchPopularMovies(null) : movieApi.searchMovies(query, null);
 
     source.subscribeOn(io()).observeOn(mainThread()).subscribe((response, error) -> {
       if (error != null) {

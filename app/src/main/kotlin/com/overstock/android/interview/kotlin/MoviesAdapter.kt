@@ -2,6 +2,7 @@ package com.overstock.android.interview.kotlin
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -40,10 +41,28 @@ class MoviesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 class MovieViewHolder(view: android.view.View) : RecyclerView.ViewHolder(view) {
   private val title: TextView by lazy { itemView.findViewById<TextView>(R.id.title) }
+  private val details: TextView by lazy { itemView.findViewById<TextView>(R.id.details) }
   private val poster: ImageView by lazy { itemView.findViewById<ImageView>(R.id.poster) }
+  private val rating: TextView by lazy { itemView.findViewById<TextView>(R.id.rating)}
 
   fun bind(movie: MovieResult) {
     title.text = movie.title
+    details.text = movie.details()
+
+    if (movie.averageRating == null) {
+      rating.visibility = View.GONE
+    }
+    else {
+      movie.averageRating.let {
+        rating.text = it.toString()
+        rating.setBackgroundResource(when {
+          it < 4 -> R.drawable.rating_red
+          it >= 7 -> R.drawable.rating_green
+          else -> R.drawable.rating_yellow
+        })
+      }
+    }
+
     Glide.with(itemView.context)
       .load("http://image.tmdb.org/t/p/$WIDTH_OPTION/${movie.relativePosterPath}")
       .apply(RequestOptions().error(R.drawable.no_poster_image).override(Target.SIZE_ORIGINAL))

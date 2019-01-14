@@ -40,7 +40,12 @@ data class MovieResult(
   @SerializedName("release_date") val releaseDate: String? = null,
   @SerializedName("vote_average") val averageRating: Float?,
   @SerializedName("genre_ids") val genreIds: List<Int> = emptyList()
-)
+){
+  fun genres(): List<String> = genreIds.map { genreIdToGenreName(it) }.filterNotNull()
+  fun firstGenre(): String? = genres().firstOrNull()
+  fun year(): String? = releaseDate?.substring(0, 4)
+  fun details(): String = arrayOf(firstGenre(), year()).joinToString(", ")
+}
 
 @Suppress("unused")
 private fun genreIdToGenreName(id: Int): String? {

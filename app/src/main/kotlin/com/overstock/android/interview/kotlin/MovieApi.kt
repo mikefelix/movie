@@ -42,8 +42,11 @@ data class MovieResult(
   @SerializedName("genre_ids") val genreIds: List<Int> = emptyList()
 ){
   fun genres(): List<String> = genreIds.map { genreIdToGenreName(it) }.filterNotNull()
+
   fun firstGenre(): String? = genres().firstOrNull()
-  fun year(): String? = releaseDate?.substring(0, 4)
+
+  fun year(): String? = releaseDate?.run { substring(0, Math.min(length, 4)) }
+
   fun details(): String = arrayOf(firstGenre(), year()).joinToString(", ")
 
   fun test(): String  {

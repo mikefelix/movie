@@ -27,43 +27,43 @@ class KotlinMovieSearchActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_movie_search)
 
-    findViewById<RecyclerView>(R.id.movies_recycler).apply {
-      adapter = this.adapter
-    }.also {
-      when (getResources().getConfiguration().orientation) {
-        Configuration.ORIENTATION_PORTRAIT -> it.layoutManager = GridLayoutManager(this, 2)
-        Configuration.ORIENTATION_LANDSCAPE -> it.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+    findViewById<RecyclerView>(R.id.movies_recycler).let {
+      it.adapter = this.adapter
+      it.layoutManager = when (getResources().getConfiguration().orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> GridLayoutManager(this, 2)
+        Configuration.ORIENTATION_LANDSCAPE -> LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         else -> throw RuntimeException("Unknown orientation")
       }
     }
 
-    val searchField = findViewById<EditText>(R.id.search_field)
-
-    searchField.setOnEditorActionListener { v, actionId, event ->
-      val ims = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-      ims?.hideSoftInputFromWindow(searchField.windowToken, 0)
-      search(searchField.text.toString())
-      true
-    }
-
-    searchField.addTextChangedListener(object: TextWatcher {
-      private var searchQuery = ""
-
-      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        val text = s?.toString()?.trim() ?: ""
-        if (searchQuery != text){
-          searchQuery = text
-          searchHandler.postDelayed({
-            if (searchQuery == text){
-              search(searchQuery)
-            }
-          },800)
-        }
+    findViewById<EditText>(R.id.search_field).apply {
+      setOnEditorActionListener { v, actionId, event ->
+        val ims = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        ims?.hideSoftInputFromWindow(windowToken, 0)
+        search(text.toString())
+        true
       }
 
-      override fun afterTextChanged(s: Editable?) = Unit
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-    })
+      addTextChangedListener(object: TextWatcher {
+        private var searchQuery = ""
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+          val text = s?.toString()?.trim() ?: ""
+          if (searchQuery != text){
+            searchQuery = text
+            searchHandler.postDelayed({
+              if (searchQuery == text){
+                search(searchQuery)
+              }
+            },800)
+          }
+        }
+
+        override fun afterTextChanged(s: Editable?) = Unit
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+      })
+
+    }
 
     search()
   }
